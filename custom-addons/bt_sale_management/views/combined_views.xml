@@ -1,0 +1,112 @@
+<odoo>
+  <data noupdate="1">
+    <record id="seq_bt_sale_order" model="ir.sequence">
+      <field name="name">BT Sale Order Sequence</field>
+      <field name="code">sale.management.order</field>
+      <field name="prefix">SO</field>
+      <field name="padding">5</field>
+      <field name="company_id" eval="False"/>
+    </record>
+  </data>
+
+  <data>
+    <record id="view_bt_sale_order_list" model="ir.ui.view">
+      <field name="name">sale.management.order.list</field>
+      <field name="model">sale.management.order</field>
+      <field name="arch" type="xml">
+        <list string="Sale Orders" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-muted="state == 'cancel'">
+          <field name="name" string="Mã đơn hàng" readonly="1"/>
+          <field name="partner_id" string="Khách hàng"/>
+          <field name="date_order" string="Ngày đặt hàng"/>
+          <field name="amount_total" string="Tổng tiền" sum="Total" widget="monetary"/>
+          <field name="state" string="Trạng thái" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-warning="state == 'done'"/>
+        </list>
+      </field>
+    </record>
+
+    <record id="view_bt_sale_order_form" model="ir.ui.view">
+      <field name="name">sale.management.order.form</field>
+      <field name="model">sale.management.order</field>
+      <field name="arch" type="xml">
+        <form string="Sale Order">
+          <header>
+            <button name="action_confirm" string="Xác nhận" type="object" invisible="state != 'draft'" class="btn-primary"/>
+            <button name="action_done" string="Hoàn thành" type="object" invisible="state != 'confirmed'" class="btn-primary"/>
+            <button name="action_cancel" string="Hủy đơn" type="object" invisible="state not in ['draft', 'confirmed']"/>
+            <button name="action_draft" string="Thiết lập về nháp" type="object" invisible="state != 'cancel'"/>
+            <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+          </header>
+          <sheet>
+            <div class="oe_title">
+              <label for="name" string="Số đơn hàng"/>
+              <h1><field name="name" readonly="1"/></h1>
+            </div>
+            <group>
+              <group>
+                <field name="partner_id" string="Khách hàng" readonly="state != 'draft'"/>
+                <field name="currency_id" invisible="1"/>
+              </group>
+              <group>
+                <field name="date_order" string="Ngày lập" readonly="state != 'draft'"/>
+              </group>
+            </group>
+            <notebook>
+              <page string="Sản phẩm &amp; Dịch vụ" name="order_lines">
+                <field name="order_line" readonly="state == 'done'">
+                  <list editable="bottom">
+                    <field name="product_id" string="Sản phẩm"/>
+                    <field name="product_uom_qty" string="Số lượng"/>
+                    <field name="price_unit" string="Đơn giá"/>
+                    <field name="price_subtotal" string="Thành tiền" widget="monetary"/>
+                    <field name="currency_id" invisible="1"/>
+                  </list>
+                </field>
+                <group class="oe_subtotal_footer oe_right">
+                  <field name="amount_untaxed" string="Cộng tiền hàng" widget="monetary"/>
+                  <field name="amount_tax" string="Thuế GTGT (10%)" widget="monetary"/>
+                  <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                    <label for="amount_total" string="Tổng cộng thanh toán"/>
+                  </div>
+                  <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_bt_sale_order_search" model="ir.ui.view">
+      <field name="name">sale.management.order.search</field>
+      <field name="model">sale.management.order</field>
+      <field name="arch" type="xml">
+        <search string="Tìm kiếm đơn hàng">
+          <field name="name"/>
+          <field name="partner_id"/>
+          <filter string="Đơn nháp" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+          <filter string="Đã xác nhận" name="filter_confirmed" domain="[('state', '=', 'confirmed')]"/>
+          <separator/>
+          <group>
+            <filter string="Khách hàng" name="group_by_partner" context="{'group_by': 'partner_id'}"/>
+            <filter string="Trạng thái" name="group_by_status" context="{'group_by': 'state'}"/>
+          </group>
+        </search>
+      </field>
+    </record>
+
+    <record id="action_bt_sale_order" model="ir.actions.act_window">
+      <field name="name">Đơn bán hàng</field>
+      <field name="res_model">sale.management.order</field>
+      <field name="view_mode">list,form</field>
+      <field name="search_view_id" ref="view_bt_sale_order_search"/>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Tạo đơn hàng đầu tiên để bắt đầu quy trình bán hàng!
+        </p>
+      </field>
+    </record>
+
+    <menuitem id="menu_bt_sale_root" name="BT Sales" sequence="10" web_icon="bt_sale_management,static/description/icon.png"/>
+    <menuitem id="menu_bt_sale_order" name="Đơn hàng" parent="menu_bt_sale_root" action="action_bt_sale_order" sequence="10"/>
+  </data>
+</odoo>

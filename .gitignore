@@ -1,0 +1,62 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- Odoo Specific ---
+# Bỏ qua file cấu hình cá nhân (chứa pass db, port...)
+*.conf
+!odoo.conf.example 
+
+# Bỏ qua dữ liệu thực tế của Odoo (Filestore, sessions)
+# Nếu bạn để data_dir trong thư mục dự án
+/data/
+/filestore/
+/sessions/
+*.log
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.project
+.pydevproject
+.settings/
+
+# --- OS generated files ---
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+
+# --- Virtual Environment ---
+.env
+.venv
+env/
+venv/
+ENV/
+
+# --- Tools ---
+.pre-commit-config.yaml.tmp
+.mypy_cache/
+.pytest_cache/

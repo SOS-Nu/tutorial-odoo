@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:15
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+
+  odoo:
+    image: odoo:19
+    command: odoo --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons -u bt_sale_management --db_host=db --db_user=odoo --db_password=odoo --dev=all
+    depends_on:
+      - db
+
+    ports:
+      - "8069:8069"
+
+    volumes:
+      - ./custom-addons:/mnt/extra-addons
+      # - ./enterprise:/mnt/enterprise
+      - ./odoo:/mnt/odoo-source
+
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: odoo
