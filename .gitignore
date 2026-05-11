@@ -55,6 +55,7 @@ desktop.ini
 env/
 venv/
 ENV/
+odoo.conf
 
 # --- Tools ---
 .pre-commit-config.yaml.tmp

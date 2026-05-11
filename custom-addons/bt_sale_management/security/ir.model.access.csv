@@ -1,3 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sale_management_order,sale.management.order,model_sale_management_order,base.group_user,1,1,1,1
-access_sale_management_order_line,sale.management.order.line,model_sale_management_order_line,base.group_user,1,1,1,1
+access_sale_order_all,sale.order.all,model_sale_management_order,,1,1,1,1
+access_sale_order_line_all,sale.order.line.all,model_sale_management_order_line,,1,1,1,1
